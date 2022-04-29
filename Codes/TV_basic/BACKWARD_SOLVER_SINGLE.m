@@ -11,8 +11,7 @@ classdef BACKWARD_SOLVER_SINGLE < BACKWARD_SOLVER
                 'kappamax',0,... % imaginary RI
                 'inner_itt',100,... % imaginary RI
                 'itter_max',100,... % imaginary RI
-                'num_scan_per_iteration',0,... % 0 -> every scan is used
-                'verbose',true ...
+                'num_scan_per_iteration',0 ... % 0 -> every scan is used
             );
             if nargin==1
                 warning('off','all');

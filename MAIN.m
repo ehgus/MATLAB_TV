@@ -43,7 +43,7 @@ field_retrieval=FIELD_EXPERIMENTAL_RETRIEVAL(field_retrieval_params);
 
 % RI - rytov
 rytov_solver=BACKWARD_SOLVER_RYTOV(params);
-[RI_rytov, ORytov]=((rytov_solver.solve(input_field,field_trans)));
+[RI_rytov, ORytov]=rytov_solver.solve(input_field,field_trans);
 RI_rytov = real(RI_rytov);
 mask = ORytov ~=0;
 % figure;orthosliceViewer(real(RI_rytov)); title('Rytov')
