@@ -29,6 +29,7 @@ classdef TV < handle
             params.use_cuda=true;
             %reduce gpu memory usage 
             params.low_memory=false;
+            params.verbose=false;
         end
     end
     methods
@@ -131,6 +132,7 @@ classdef TV < handle
             y=A(in_mat);%the base data
             
             if strcmp(reg_name,'tv')
+                % (Ax-y)^2 + lambda*TV(x)
                 cost=@(X) sum(abs(A(X)-y).^2,'all') + 2*h.parameters.TV_strength*TV_helper_TV_val(X);
             elseif strcmp(reg_name,'hessian')
                 error('To do');
@@ -151,10 +153,12 @@ classdef TV < handle
             
             
             cost_history=[];
-            figure;
-            hax1=axes;
-            figure;
-            hax2=axes;
+            if h.parameters.verbose
+                figure;
+                hax1=axes;
+                figure;
+                hax2=axes;
+            end
             
             %start the itterations
             fprintf(1,'Computation Progress: %3.0f',0);
@@ -198,8 +202,10 @@ classdef TV < handle
                 end
                 %display(['cost = ' num2str(c_np)]);
                 cost_history(end+1)=gather((c_np(:)));
-                plot(hax1,cost_history);drawnow;
-                imagesc(hax2,real(squeeze(x_n(:,round(end/2),:))'));colormap gray;drawnow;
+                if h.parameters.verbose
+                    plot(hax1,cost_history);drawnow;
+                    imagesc(hax2,real(squeeze(x_n(:,round(end/2),:))'));colormap gray;drawnow;
+                end
             end
             
             fprintf('\n');

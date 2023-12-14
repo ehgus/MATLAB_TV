@@ -13,7 +13,7 @@ classdef FIELD_EXPERIMENTAL_RETRIEVAL < handle
                 'cutout_portion', 1/3, ...
                 'other_corner',false, ...
                 'conjugate_field',false, ...
-                'use_GPU',true, ...
+                'verbose',false, ...
                 'normalidx',1 ...
             );
         utility;
@@ -27,10 +27,7 @@ classdef FIELD_EXPERIMENTAL_RETRIEVAL < handle
             end
         end
 
-        function [input_field,output_field,updated_optical_parameters, k0s]=get_fields(h,input_field,output_field,DEBUG)
-            if nargin==3
-                DEBUG = false;
-            end
+        function [input_field,output_field,updated_optical_parameters, k0s]=get_fields(h,input_field,output_field)
             % Image state checker (error)
             assert(isequal(size(input_field),size(output_field)), 'Background and sample field must be of same size')
             assert(size(input_field,1) == size(input_field,2), 'The image must be a square')
@@ -164,7 +161,7 @@ classdef FIELD_EXPERIMENTAL_RETRIEVAL < handle
                 
             for jj = 1:size(retPhase,3)
                 retPhase(:,:,jj)=PhiShiftMS(retPhase(:,:,jj),1,1);
-                if DEBUG
+                if h.parameters.verbose
                     subplot(121);imagesc(retAmplitude(:,:,jj));axis image; axis off; colorbar
                     subplot(122);imagesc(retPhase(:,:,jj));axis image; axis off; colorbar; drawnow
                 end

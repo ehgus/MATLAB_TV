@@ -40,8 +40,9 @@ classdef BACKWARD_SOLVER_SINGLE < BACKWARD_SOLVER
             t_n=0;
             t_np=1;
             
-            u_n=(RI.^2 / h.parameters.RI_bg^2 - 1);
-            x_n=(RI.^2 / h.parameters.RI_bg^2 - 1);
+            potential=RI.^2 / h.parameters.RI_bg^2 - 1;
+            u_n=potential;
+            x_n=potential;
             c_n=0;
             c_np=Inf;
             
@@ -65,7 +66,7 @@ classdef BACKWARD_SOLVER_SINGLE < BACKWARD_SOLVER
             Vmax = h.parameters.nmax^2 / h.parameters.RI_bg^2 - 1;
             Vimag_max = 2 * h.parameters.kappamax *h.parameters.nmax / h.parameters.RI_bg^2;
             
-            ORytov = fftn(RI.^2 / h.parameters.RI_bg^2 - 1) .* mask;
+            ORytov = fftn(potential) .* mask;
             
 %             figure,orthosliceViewer(abs(gather(mask))), error
             
@@ -77,7 +78,7 @@ classdef BACKWARD_SOLVER_SINGLE < BACKWARD_SOLVER
                 t_n=t_np;
                 c_n=c_np;
                 
-                gradient_RI = ifftn(fftn(RI.^2 / h.parameters.RI_bg^2 - 1).*mask - ORytov);
+                gradient_RI = ifftn(fftn(potential).*mask - ORytov);
                 
 %                 size(u_n)
 %                 size(gradient_RI)
@@ -89,7 +90,7 @@ classdef BACKWARD_SOLVER_SINGLE < BACKWARD_SOLVER
                 x_n=s_n;
                 RI=u_n;
                 RI=h.parameters.RI_bg *sqrt(RI+1);
-                
+                potential = RI.^2 / h.parameters.RI_bg^2 - 1;
                 toc;
                 
                 if h.parameters.verbose
