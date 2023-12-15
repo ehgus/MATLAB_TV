@@ -77,12 +77,12 @@ classdef BACKWARD_SOLVER_RYTOV < BACKWARD_SOLVER
                 UsRytov=fft2(FRytov); % unit: (um^2)
                 
                 UsRytov=circshift(UsRytov,[f_dy(i) f_dx(i)]);
-                Fx=fx-f_dx(i);Fy=fy-f_dy(i);Fz=fz-f_dz(i);
+                Fx=f_dx(i)-fx;Fy=f_dy(i)-fy;Fz=f_dz(i)-fz;
                 Uprime=kz/1i.*UsRytov(xind);% unit: (um^1) % kz is spatial frequency, so 2pi is multiplied for wave vector
                 
-                Fx=rem(Fx+xsize,xsize)+1;
-                Fy=rem(Fy+ysize,ysize)+1;
-                Fz=rem(Fz+zsize,zsize)+1;
+                Fx=mod(Fx,xsize)+1;
+                Fy=mod(Fy,ysize)+1;
+                Fz=mod(Fz,zsize)+1;
                 Kzp=sub2ind(size(Count),Fy,Fx,Fz);
 
                 ORytov(Kzp)=ORytov(Kzp)+Uprime;
